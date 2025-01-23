@@ -1,29 +1,28 @@
 import os
 
-# Define the parent directory containing the folders
-parent_directory = "C:\\Users\\Noshin\\OneDrive\\Desktop\\faria\\fingerprint\\Collected_Data"
+# Define the folder containing the images
+folder_path = '/home/noshin/Downloads/collected_data-20250123T030607Z-001/collected_data/pair_data'
 
+# Specify the desired file extension for renamed images
+file_extension = '.png'  # Change this if needed (e.g., '.jpg')
 
+# Get a list of all files in the folder
+file_list = [f for f in os.listdir(folder_path) if f.endswith(file_extension)]
 
-# List of folder names
-folders = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
+# Sort the files to ensure they are renamed in order
+file_list.sort()
 
-for folder in folders:
-    folder_path = os.path.join(parent_directory, folder)
-    if os.path.isdir(folder_path):
-        # List all files in the folder
-        files = os.listdir(folder_path)
-        # Filter to include only image files (e.g., .png, .jpg, .jpeg)
-        image_files = [f for f in files if f.lower().endswith(('.png'))]
+# Rename files sequentially
+for i, filename in enumerate(file_list, start=1):
+    # Construct the full path to the current file
+    old_file_path = os.path.join(folder_path, filename)
+    
+    # Create the new filename
+    new_filename = f"{i:04d}{file_extension}"  # e.g., 0001.png, 0002.png
+    new_file_path = os.path.join(folder_path, new_filename)
+    
+    # Rename the file
+    os.rename(old_file_path, new_file_path)
+    print(f"Renamed: {filename} -> {new_filename}")
 
-        for index, filename in enumerate(image_files, start=1):
-            # Generate new file name as "1.png", "2.png", etc.
-            new_name = f"{index:03d}.png"
-            # Get full paths
-            old_file = os.path.join(folder_path, filename)
-            new_file = os.path.join(folder_path, new_name)
-            # Rename file
-            os.rename(old_file, new_file)
-            print(f"Renamed: {old_file} -> {new_file}")
-
-print("Renaming complete.")
+print("All files have been renamed sequentially.")
